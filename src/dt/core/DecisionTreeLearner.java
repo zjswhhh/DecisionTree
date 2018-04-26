@@ -150,5 +150,25 @@ public class DecisionTreeLearner extends AbstractDecisionTreeLearner {
 	    }
 	    return result; 
 	}
+	
+	//cross validation
+	public double crossValidation(DecisionTreeLearner learner, Set<Example> examples, int k) {
+		double error = 0;
+		
+		ArrayList<Example> list_examples = new ArrayList<Example>(examples);
+		Collections.shuffle(list_examples);
+
+		for (int fold = 1; fold <= k; fold++) {
+			int split1 = (new Double(list_examples.size() * (fold-1)/k)).intValue();
+			int split2 = (new Double(list_examples.size() * fold/k-1)).intValue();
+			Set<Example> train = new ArraySet<Example>(list_examples.subList(0, split1));
+			train.addAll(list_examples.subList(split2, list_examples.size()));
+			//System.out.println(list_examples.size());
+			Set<Example> test = new ArraySet<Example>(list_examples.subList(split1, split2));
+			DecisionTree tree = learner.learn(train);
+			error += tree.test(test);
+		}
+		return error/k;
+	}
 
 }
