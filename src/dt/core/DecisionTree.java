@@ -91,7 +91,7 @@ public class DecisionTree {
 	 * Run this DecisionTree on the given Examples and print results and
 	 * summary statistics.
 	 */
-	public void test(Set<Example> examples) {
+	public double test(Set<Example> examples) {
 		int ntested = 0;
 		int ncorrect = 0;
 		for (Example e : examples) {
@@ -104,6 +104,7 @@ public class DecisionTree {
 		}
 		double pct = (double)ncorrect / ntested * 100;
 		System.out.format("correct: %d/%d (%.2f)%%", ncorrect, ntested, pct);
+		return 100-pct;
 	}
 
 }
